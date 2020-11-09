@@ -1,6 +1,6 @@
 {
   "name": "taxios",
-  "version": "0.1.0",
+  "version": "0.1.0-0",
   "description": "Test apps with axios",
   "main": "taxios.js",
   "repository": "https://github.com/mhio/taxios.git",
