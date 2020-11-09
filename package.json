@@ -43,5 +43,12 @@
       "./test/mocha-setup.js"
     ],
     "ui": "bdd"
+  },
+  "nyc": {
+    "per-file": true,
+    "lines": 70,
+    "statements": 60,
+    "functions": 60,
+    "branches": 60
   }
 }

@@ -18,19 +18,29 @@ class Taxios {
     const taxios = new this({ app, logger })
     return taxios.listen()
   }
+
+  /**
+   * Inject your own server
+   */
   static srv(http_server, app){
     const ret = this.app(app)
     ret.srv(http_server)
     return ret
   }
-  static srv2(http2_server, app){
-    const ret = this.app(app)
-    ret.srv2(http2_server)
-    return ret
-  }
+
+  /**
+   * Inject your own http2 server
+   */ 
+  //static srv2(http2_server, app){
+  //  const ret = this.app(app)
+  //  ret.srv2(http2_server)
+  //  return ret
+  //}
+
   static logger(){
     return new TestPinoLogger()
   }
+
   constructor({ app, logger }){
     this.app = app
     this.logger = logger || Taxios.logger()
@@ -62,41 +72,41 @@ class Taxios {
    * @param {string|number} address 
    * @returns {Promise<http2.Server>}
    */
-  listen2(address){
-    return new Promise(ok => {
-      // this.srv2 = http2.createServer({}, this.app.callback())
-      const opts = {
-        key: this.constructor.tls_self_key,
-        cert: this.constructor.tls_self_cert,
-      }
-      this.srv2 = http2.createSecureServer(opts, this.app.callback())
-      this.srv2.listen(address, ()=> {
-        const deets = this.srv2.address()
-        this.url = `https://${deets.address}:${deets.port}`
-        debug(`url2 is ${this.srv2.address()} ${this.url}`)
-        ok(this)
-      })
-    })
-  }
+  //listen2(address){
+  //  return new Promise(ok => {
+  //    // this.srv2 = http2.createServer({}, this.app.callback())
+  //    const opts = {
+  //      key: this.constructor.tls_self_key,
+  //      cert: this.constructor.tls_self_cert,
+  //    }
+  //    this.srv2 = http2.createSecureServer(opts, this.app.callback())
+  //    this.srv2.listen(address, ()=> {
+  //      const deets = this.srv2.address()
+  //      this.url = `https://${deets.address}:${deets.port}`
+  //      debug(`url2 is ${this.srv2.address()} ${this.url}`)
+  //     ok(this)
+  //    })
+  //  })
+  //}
 
-  srv(http_server){
-    this.srv = http_server
-    const deets = this.srv.address()
-    const server_address = (/:/.exec(deets.address))
-      ? `[${deets.address}]`
-      : `${deets.address}`
-    this.url = `http://${server_address}:${deets.port}`
-    return this
-  }
-  srv2(http2_server){
-    this.srv2 = http2_server
-    const deets = this.srv2.address()
-    const server_address = (/:/.exec(deets.address))
-      ? `[${deets.address}]`
-      : `${deets.address}`
-    this.url = `https://${server_address}:${deets.port}`
-    return this
-  }
+  //addSrv(http_server){
+  //  this.srv = http_server
+  //  const deets = this.srv.address()
+  //  const server_address = (/:/.exec(deets.address))
+  //    ? `[${deets.address}]`
+  //    : `${deets.address}`
+  //  this.url = `http://${server_address}:${deets.port}`
+  //  return this
+  //}
+  //addSrv2(http2_server){
+  //  this.srv2 = http2_server
+  //  const deets = this.srv2.address()
+  //  const server_address = (/:/.exec(deets.address))
+  //    ? `[${deets.address}]`
+  //    : `${deets.address}`
+  //  this.url = `https://${server_address}:${deets.port}`
+  //  return this
+  //}
 
   /**
    * Close down the server
