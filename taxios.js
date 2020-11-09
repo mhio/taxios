@@ -3,7 +3,7 @@ const path = require('path')
 const axios = require('axios')
 const http = require('http')
 const http2 = require('http2')
-const debug = require('debug')('mhio:taxios')
+const debug = require('debug')('taxios')
 
 function jsonClone(o) {
   return JSON.parse(JSON.stringify(o))
@@ -33,7 +33,7 @@ class Taxios {
   }
   constructor({ app, logger }){
     this.app = app
-    this.logger = logger
+    this.logger = logger || Taxios.logger()
     this.last_response = null
   }
   /**
@@ -123,6 +123,7 @@ class Taxios {
     try {
       const res = await axios({ method, url: app_url, data, options })
       this.last_response = res
+      debug('got response', res.config.url, res.data, res.headers, )
       return res
     }
     catch (error){
@@ -160,7 +161,7 @@ class Taxios {
     this.logger_logs = []
     this.logger.logs_errors = []
     return true
-  })
+  }
 
   /**
    * Clean up a server/logs after tests are complete
@@ -168,7 +169,7 @@ class Taxios {
   async afterMocha(mocha_test){
     this.handleMochaError(mocha_test)
     return this.cleanUp()
-  })
+  }
 
 }
 
