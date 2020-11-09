@@ -1,21 +1,26 @@
-const fs = require('fs')
-const path = require('path')
+//const fs = require('fs')
+//const path = require('path')
 const axios = require('axios')
 const http = require('http')
-const http2 = require('http2')
+// const http2 = require('http2')
 const debug = require('debug')('taxios')
 
 function jsonClone(o) {
   return JSON.parse(JSON.stringify(o))
 }
+
 class Taxios {
   
   static _initialiseClass(){
     //this.tls_self_key = fs.readFileSync(path.join(__dirname,'fixture','server-key.pem'))
     //this.tls_self_cert = fs.readFileSync(path.join(__dirname,'fixture','server-cert.pem'))
   }
-  static async app(app, logger){
-    const taxios = new this({ app, logger })
+
+  /**
+   * Helper to create an instance and async listen it
+   */
+  static async app (app, logger) {
+    const taxios = new this({ app: app, logger:logger })
     return taxios.listen()
   }
 

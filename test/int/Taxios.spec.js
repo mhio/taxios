@@ -1,3 +1,4 @@
+/* global expect */
 const { Taxios } = require('../../')
 const Koa = require('koa')
 
@@ -38,8 +39,8 @@ describe('test::int::Taxios', function(){
     beforeEach(async function(){
       const logger = Taxios.logger()
       const app = new Koa()
-      const throwError = async msg => {throw new Error(msg)}
-      app.use(async ctx => throwError('waaah').catch(err => logger.error({ msg: 'got', err })))
+      const throwError = async msg => { throw new Error(msg) }
+      app.use(async () => throwError('waaah').catch(err => logger.error({ msg: 'got', err })))
       request = await Taxios.app(app, logger)
     })
 
@@ -49,7 +50,7 @@ describe('test::int::Taxios', function(){
 
     it('should request from the app for great success', async function(){
       try {
-        const res = await request.send('get', '/whatever', {}, { headers: { type: 'yeet' } })
+        await request.send('get', '/whatever', {}, { headers: { type: 'yeet' } })
         expect.fail('no error was thrown')
       }
       catch (err) {
