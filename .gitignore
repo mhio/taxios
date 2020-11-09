@@ -1,0 +1,11 @@
+node_modules/
+
+.nyc_output/
+coverage/
+doc/html
+lib/
+pkg/
+*.tgz
+
+yarn-error.log
+npm-error.log
