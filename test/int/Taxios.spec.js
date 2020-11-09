@@ -9,7 +9,7 @@ describe('test::int::Taxios', function(){
   })
 
   it('should jsonClone', function(){
-    const obj = { one: ["test"], two: 2, }
+    const obj = { one: ['test'], two: 2, }
     expect(jsonClone(obj)).to.eql(obj)
   })
 
