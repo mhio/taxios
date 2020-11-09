@@ -1,5 +1,5 @@
 {
-  "name": "taxios",
+  "name": "@mhio/taxios",
   "version": "0.1.0-1",
   "description": "Test apps with axios",
   "main": "src/taxios.js",
