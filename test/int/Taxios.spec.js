@@ -31,7 +31,17 @@ describe('test::int::Taxios', function(){
     })
 
     it('should request from the app for great success', async function(){
-      const res = await request.send('get', '/whatever', {}, { headers: { type: 'yeet' } })
+      const res = await request.send('options', '/whatever', {}, { headers: { type: 'yeet' } })
+      expect( res.data ).to.equal('result in text')
+    })
+
+    it('should request from the app for great success', async function(){
+      const res = await request.post('/whatever', { data: true})
+      expect( res.data ).to.equal('result in text')
+    })
+
+    it('should request from the app for great success', async function(){
+      const res = await request.get('/whatever', {}, { headers: { type: 'yeet' } })
       expect( res.data ).to.equal('result in text')
     })
 

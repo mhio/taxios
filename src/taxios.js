@@ -27,11 +27,11 @@ class Taxios {
   /**
    * Inject your own server
    */
-  static srv(http_server, app){
-    const ret = this.app(app)
-    ret.srv(http_server)
-    return ret
-  }
+  // static srv(http_server, app){
+  //   const ret = this.app(app)
+  //   ret.srv(http_server)
+  //   return ret
+  // }
 
   /**
    * Inject your own http2 server
@@ -100,7 +100,7 @@ class Taxios {
   //  const server_address = (/:/.exec(deets.address))
   //    ? `[${deets.address}]`
   //    : `${deets.address}`
-  //  this.url = `http://${server_address}:${deets.port}`
+   // this.url = `http://${server_address}:${deets.port}`
   //  return this
   //}
   //addSrv2(http2_server){

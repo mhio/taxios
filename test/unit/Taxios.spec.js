@@ -1,5 +1,5 @@
 /* global expect */
-const { Taxios, jsonClone } = require('../../src/Taxios')
+const { Taxios, jsonClone } = require('../../src/taxios')
 
 describe('test::int::Taxios', function(){
 
