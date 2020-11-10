@@ -27,11 +27,11 @@ class Taxios {
   /**
    * Inject your own server
    */
-  // static srv(http_server, app){
-  //   const ret = this.app(app)
-  //   ret.srv(http_server)
-  //   return ret
-  // }
+  static server(http_server, app, logger){
+    const taxios = new this({app, logger})
+    taxios.server(http_server)
+    return taxios
+  }
 
   /**
    * Inject your own http2 server
@@ -94,15 +94,15 @@ class Taxios {
   //  })
   //}
 
-  //addSrv(http_server){
-  //  this.srv = http_server
-  //  const deets = this.srv.address()
-  //  const server_address = (/:/.exec(deets.address))
-  //    ? `[${deets.address}]`
-  //    : `${deets.address}`
-   // this.url = `http://${server_address}:${deets.port}`
-  //  return this
-  //}
+  server(http_server){
+   this.srv = http_server
+   const deets = this.srv.address()
+   const server_address = (/:/.exec(deets.address))
+     ? `[${deets.address}]`
+     : `${deets.address}`
+   this.url = `http://${server_address}:${deets.port}`
+   return this
+  }
   //addSrv2(http2_server){
   //  this.srv2 = http2_server
   //  const deets = this.srv2.address()
@@ -153,8 +153,10 @@ class Taxios {
    */
   handleMochaError(mocha_test){
     // console.log(mocha_test)
+    // Not sure how to test this in mocha yet... need some console capturing thing
+    /* istanbul ignore next */
     if (mocha_test.currentTest && mocha_test.currentTest.state === 'failed') {
-      console.error('logger_errors', this.logger.logs_errors)
+      console.error('logger_errors', this.logger.errors)
       if (this.last_response) {
         if (this.last_response.data) {
           console.error('response', this.last_response.config.method, this.last_response.config.url, this.last_response.data)
@@ -174,7 +176,7 @@ class Taxios {
     this.srv = null
     this.last_response = null
     this.logger_logs = []
-    this.logger.logs_errors = []
+    this.logger.errors = []
     return true
   }
 
@@ -193,22 +195,22 @@ Taxios._initialiseClass()
 class TestPinoLogger {
   constructor(){
     this.logs = []
-    this.logs_errors = []
+    this.errors = []
   }
   fatal(...args) {
     this.logs.push(['fatal', ...args])
-    this.logs_errors.push(['fatal', ...args])
+    this.errors.push(['fatal', ...args])
   }
   error(...args) {
     this.logs.push(['error', ...args])
-    this.logs_errors.push(['error', ...args])
+    this.errors.push(['error', ...args])
   }
   warn(...args){ this.logs.push(['warn', ...args]) }
   info(...args){ this.logs.push(['info', ...args]) }
   debug(...args){ this.logs.push(['debug', ...args]) }
   clearLogs(){
     this.logs = []
-    this.logs_errors = []
+    this.errors = []
   }
 }
 

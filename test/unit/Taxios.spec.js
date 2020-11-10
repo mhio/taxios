@@ -1,7 +1,7 @@
 /* global expect */
 const { Taxios, jsonClone } = require('../../src/taxios')
 
-describe('test::int::Taxios', function(){
+describe('test::unit::Taxios', function(){
 
   it('should load', function(){ 
     expect(Taxios).to.be.ok

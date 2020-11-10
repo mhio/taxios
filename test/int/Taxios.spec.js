@@ -1,6 +1,7 @@
 /* global expect */
 const { Taxios, jsonClone } = require('../../')
 const Koa = require('koa')
+const http = require('http')
 
 describe('test::int::Taxios', function(){
 
@@ -47,6 +48,30 @@ describe('test::int::Taxios', function(){
 
   })
 
+  describe('test injecting a already created server', function(){
+
+    let server
+    let logger
+
+    beforeEach(function(done){
+      logger = Taxios.logger()
+      server = new http.createServer((req, res) => {
+        res.writeHead(200, {'Content-Type':'text/plain'})
+        res.end('hello')
+        logger.info('test')
+      })
+      server.listen(done)
+    })
+    afterEach(function(done){
+      server.close(done)
+    })
+
+    it('should request from the server for great success', async function(){
+      const request = Taxios.server(server, null, logger)
+      await request.send('get', '/whatever', {}, { headers: { type: 'yeet' } })
+    })
+
+  })
   describe('test the app with logger', function(){
 
     let request
@@ -69,7 +94,7 @@ describe('test::int::Taxios', function(){
         expect.fail('no error was thrown')
       }
       catch (err) {
-        const errs = request.logger.logs_errors
+        const errs = request.logger.errors
         expect(errs).to.have.lengthOf(1)
         expect(errs[0][0]).to.equal('error')
         expect(errs[0][1].msg).to.equal('got')

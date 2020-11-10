@@ -1,6 +1,6 @@
 {
   "name": "@mhio/taxios",
-  "version": "0.1.0",
+  "version": "0.2.0-0",
   "description": "Test apps with axios",
   "main": "src/taxios.js",
   "repository": "https://github.com/mhio/taxios.git",
@@ -15,6 +15,7 @@
     "release:test": "set -uex; yarn test; npm version prerelease; npm publish --access public --tag testing",
     "release:patch": "set -uex; git pull; rm -rf node_modules; yarn; yarn run test:coverage; yarn run test:lint; yarn run build; npm version patch; git push; npm publish --access public; git push --tags",
     "test:coverage": "set -uex; nyc _mocha test/unit test/int; nyc report -r html; nyc check-coverage",
+    "test:all": "set -uex; yarn test:coverage; yarn test:lint;",
     "watch": "nodemon -w . -i test/output -x",
     "build": "set -uex; yarn run build:doc",
     "build:doc": "set -uex; yarn run build:doc:html; yarn run build:doc:md",
@@ -32,7 +33,8 @@
     "mocha": "~8.1.1",
     "nock": "^13.0.4",
     "nodemon": "~2.0.3",
-    "nyc": "~15.1.0"
+    "nyc": "~15.1.0",
+    "pino": "^6.7.0"
   },
   "dependencies": {
     "axios": "^0.21.0"
