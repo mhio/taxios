@@ -154,6 +154,23 @@ class Taxios {
   }
 
   /**
+   * Request that expects an error response to test. Axios errors will still be thrown
+   * if we don't get a response
+   */
+  async sendError(method, path, data, options){
+    try {
+      const res = await this.send(method, path, data, options)
+      return res
+    }
+    catch (error) {
+      if (error.response) {
+        return error.response
+      }
+      throw error
+    }
+  }
+
+  /**
    * Mocha helper to check if error, and dump info
    * @param {object} mocha_test 
    */

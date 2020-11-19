@@ -48,6 +48,32 @@ describe('test::int::Taxios', function(){
 
   })
 
+  describe('test a request that errors on the server side', function(){
+
+    let request
+
+    beforeEach(async function(){
+      const app = new Koa()
+      app.use(async ctx => {
+        ctx.status = 500
+        ctx.body = 'error will robinson!'
+      })
+      request = await Taxios.app(app)
+    })
+
+    afterEach(async function(){
+      request.handleMochaError(this)
+      await request.cleanUp()
+    })
+
+    it('should request from the app for great error', async function(){
+      const res = await request.sendError('options', '/whatever', {}, { headers: { type: 'yeet' } })
+      expect( res.data ).to.equal('error will robinson!')
+      expect( res.status ).to.equal(500)
+    })
+
+  })
+
   describe('test injecting a already created server', function(){
 
     let server
