@@ -188,7 +188,7 @@ class Taxios {
           console.error('response', this.last_response.config.method, this.last_response.config.url, this.last_response.data)
         }
         else {
-          console.error(this.last_response)
+          console.error({ config: this.last_response.config, headers: this.last_response.headers, data: this.last_response.data })
         }
       }
     }
