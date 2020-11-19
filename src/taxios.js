@@ -144,7 +144,7 @@ class Taxios {
       : `${this.url}${path}`
     debug(method, app_url, data, options)
     try {
-      const res = await axios({ method, url: app_url, data, options })
+      const res = await axios({ method, url: app_url, data, ...options })
       this.last_response = res
       debug('got response', res.config.url, res.data, res.headers, )
       return res
