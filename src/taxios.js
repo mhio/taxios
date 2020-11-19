@@ -20,6 +20,9 @@ class Taxios {
    * Helper to create an instance and async listen it
    */
   static async app (app, logger) {
+    if (!app) {
+      throw new Error('Taxios.app requires and app argument')
+    }
     const taxios = new this({ app: app, logger:logger })
     await taxios.listen()
     return taxios
@@ -57,13 +60,15 @@ class Taxios {
    * @param {string|number} address   - Node http server listen address 
    * @returns {Promise<http.Server>}
    */
-  listen(address){
+  async listen(address){
     return new Promise(ok => {
-      if (this.app.callback){
-        this.srv = http.createServer(this.app.callback())
-      }
-      else {
-        this.srv = http.createServer(this.app)
+      if (!this.srv) {
+        if (this.app.callback){
+          this.srv = http.createServer(this.app.callback())
+        }
+        else {
+          this.srv = http.createServer(this.app)
+        }
       }
       this.srv.listen(address, ()=> {
         const deets = this.srv.address()
