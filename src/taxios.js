@@ -201,7 +201,7 @@ class TestPinoLogger {
     this._level = 'info'
   }
 
-  slient(...args){}
+  slient(){}
   fatal(...args) {
     this._log('fatal', ...args)
     this._error('fatal', ...args)
@@ -225,7 +225,7 @@ class TestPinoLogger {
     return this._level
   }
   set level(value){
-    return this._level = value
+    this._level = value
   }
 
   // Not a pino method
