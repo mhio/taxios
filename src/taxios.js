@@ -61,7 +61,10 @@ class Taxios {
    * @returns {Promise<http.Server>}
    */
   async listen(address){
-    return new Promise(ok => {
+    return new Promise((ok, reject) => {
+      if (this.srv && this.srv.address && this.srv.address()){
+        reject(new Error('Server already lishening'))
+      }
       if (!this.srv) {
         if (this.app.callback){
           this.srv = http.createServer(this.app.callback())
@@ -123,7 +126,15 @@ class Taxios {
    * Close down the server
    */
   close(){
-    return new Promise(ok => this.srv && this.srv.close && this.srv.close(ok))
+    return new Promise(ok => {
+      if (this.srv && this.srv.close) {
+        this.srv.close(ok)
+        // setImmediate(()=> this.srv.emit('close'))
+        return debug('http server closing')
+      }
+      debug('http nothing to close')
+      ok(true)
+    })
   }
 
   async post(path, data, options){
@@ -144,7 +155,12 @@ class Taxios {
       : `${this.url}${path}`
     debug(method, app_url, data, options)
     try {
-      const res = await axios({ method, url: app_url, data, ...options })
+      const config = { method, url: app_url, data, }
+      for (const option in options){
+        config[option] = options[option]
+      }
+      debug('send request', config)
+      const res = await axios(config)
       this.last_response = res
       debug('got response', res.config.url, res.data, res.headers, )
       return res
@@ -198,11 +214,11 @@ class Taxios {
    * Clean up a server/logs after tests are complete
    */
   async cleanUp(){
-    this.close().catch(console.err)
-    this.srv = null
+    await this.close()
     this.last_response = null
     this.logger_logs = []
     this.logger.errors = []
+    this.srv = null
     return true
   }
 
