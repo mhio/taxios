@@ -21,7 +21,8 @@ class Taxios {
    */
   static async app (app, logger) {
     const taxios = new this({ app: app, logger:logger })
-    return taxios.listen()
+    await taxios.listen()
+    return taxios
   }
 
   /**
