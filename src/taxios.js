@@ -139,7 +139,9 @@ class Taxios {
    * Request helper
    */
   async send(method, path, data, options){
-    const app_url = `${this.url}${path}`
+    const app_url = (/^[a-z]{3,5}:\/\/.+/.exec(path))
+      ? path
+      : `${this.url}${path}`
     debug(method, app_url, data, options)
     try {
       const res = await axios({ method, url: app_url, data, options })

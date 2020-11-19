@@ -46,6 +46,13 @@ describe('test::int::Taxios', function(){
       expect( res.data ).to.equal('result in text')
     })
 
+    it('should request from a custom url', async function(){
+      const port = request.srv.address().port
+      const res = await request.get(`http://127.0.0.1:${port}/whatever`, {}, { headers: { type: 'yeet' } })
+      expect( res.data ).to.equal('result in text')
+      expect( res.config.url ).to.match(/^http:\/\/127\.0\.0\.1:/)
+    })
+
   })
 
   describe('test a request that errors on the server side', function(){
