@@ -156,7 +156,8 @@ class Taxios {
     // Not sure how to test this in mocha yet... need some console capturing thing
     /* istanbul ignore next */
     if (mocha_test.currentTest && mocha_test.currentTest.state === 'failed') {
-      console.error('logger_errors', this.logger.errors)
+      console.error('logger_errors:')
+      console.dir(this.logger.errors, { depth: 6 })
       if (this.last_response) {
         if (this.last_response.data) {
           console.error('response', this.last_response.config.method, this.last_response.config.url, this.last_response.data)
@@ -193,25 +194,54 @@ class Taxios {
 Taxios._initialiseClass()
 
 class TestPinoLogger {
+
   constructor(){
     this.logs = []
     this.errors = []
+    this._level = 'info'
   }
+
+  slient(...args){}
   fatal(...args) {
-    this.logs.push(['fatal', ...args])
-    this.errors.push(['fatal', ...args])
+    this._log('fatal', ...args)
+    this._error('fatal', ...args)
   }
   error(...args) {
-    this.logs.push(['error', ...args])
-    this.errors.push(['error', ...args])
+    this._log('error', ...args)
+    this._error('error', ...args)
   }
-  warn(...args){ this.logs.push(['warn', ...args]) }
-  info(...args){ this.logs.push(['info', ...args]) }
-  debug(...args){ this.logs.push(['debug', ...args]) }
+  warn(...args){ this._log('warn', ...args) }
+  info(...args){ this._log('info', ...args) }
+  debug(...args){ this._log('debug', ...args) }
+  trace(...args){ this._log('trace', ...args) }
+
+  child(){
+
+  }
+  flush(){
+    
+  }
+  get level(){
+    return this._level
+  }
+  set level(value){
+    return this._level = value
+  }
+
+  // Not a pino method
   clearLogs(){
     this.logs = []
     this.errors = []
   }
+  _log(level, ...args){ this.logs.push([ level, ...args]) }
+  //_log(level, ...args){ this.logs.push([ Date.now(), level, ...args]) }
+  _error(level, ...args){
+    //const line = [ Date.now(), level, ...args]
+    const line = [ level, ...args]
+    this.logs.push(line)
+    this.errors.push(line)
+  }
+  
 }
 
 module.exports = { Taxios, TestPinoLogger, jsonClone }
