@@ -142,6 +142,14 @@ class Taxios {
 
   }
 
+  async delete(path, data, options){
+    return this.send('delete', path, data, options)
+  }
+
+  async patch(path, data, options){
+    return this.send('patch', path, data, options)
+  }
+
   async get(path, data, options){
     return this.send('get', path, data, options)
   }
