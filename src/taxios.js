@@ -18,13 +18,11 @@ function joinStacks(wrapper_stack, original_stack) {
 
 class TaxiosException extends Error {
   
-  static joinStacks = joinStacks 
-
   constructor(error){
     super(`WrapError: ${error.message}`)
     this.name = this.constructor.name
     const error_stack = (error) ? error.stack : ''
-    const wrapped_stack = joinStacks(this.stack, error.stack)
+    const wrapped_stack = joinStacks(this.stack, error_stack)
     Object.defineProperty(this, 'stack', { enumerable: false, value: wrapped_stack })
     for (const prop in error) {
       this[prop] = error[prop]
@@ -32,6 +30,7 @@ class TaxiosException extends Error {
   }
  
 }
+TaxiosException.joinStacks = joinStacks
 
 class Taxios {
   
