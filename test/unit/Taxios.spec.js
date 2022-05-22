@@ -20,9 +20,9 @@ describe('test::unit::Taxios', function(){
     const ori_err = genError('dummy')
     expect(ori_err.stack).to.contain('Error: dummy')
     const err = new TaxiosError(ori_err)
-    expect(err.stack).to.contain('TaxiosError: dummy\n    at')
+    expect(err.stack).to.contain('Error: dummy\n    at')
     const lines = err.stack.split('\n')
-    expect(lines[3]).to.equal('From previous Error: dummy') 
+    expect(lines[3]).to.equal('From previous:') 
   })
 
 })

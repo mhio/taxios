@@ -9,11 +9,14 @@ function jsonClone(o) {
   return JSON.parse(JSON.stringify(o))
 }
 
-function joinStacks(wrapper_stack, original_stack) {
+//function joinStacks(wrapper_stack, original_stack) {
+function joinStacks(original_stack, wrapper_stack) {
   const stack_trace_start = wrapper_stack.indexOf('\n    at ')
   const stack_trace_line_one_end = wrapper_stack.indexOf('\n', stack_trace_start + 1)
   const stack_trace_line_two_end = wrapper_stack.indexOf('\n', stack_trace_line_one_end + 1)
-  return wrapper_stack.substr(0, stack_trace_line_two_end||stack_trace_line_one_end) + '\nFrom previous ' + original_stack
+
+  const ori_stack_trace_start = original_stack.indexOf('\n    at ')
+  return wrapper_stack.substr(0, stack_trace_line_two_end||stack_trace_line_one_end) + '\nFrom previous:\n' + original_stack.substr(ori_stack_trace_start)
 }
 
 class TaxiosError extends Error {
