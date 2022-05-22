@@ -12,25 +12,26 @@ function jsonClone(o) {
 function joinStacks(wrapper_stack, original_stack) {
   const stack_trace_start = wrapper_stack.indexOf('\n    at ')
   const stack_trace_line_one_end = wrapper_stack.indexOf('\n', stack_trace_start + 1)
-  const stack_trace_line_two_end = wrapper_stack.indexOf('\n', stack_trace_line_one_end + 1)
-  return wrapper_stack.substr(stack_trace_start, stack_trace_line_two_end - stack_trace_start) + '\n' + original_stack
+  //const stack_trace_line_two_end = wrapper_stack.indexOf('\n', stack_trace_line_one_end + 1)
+  return wrapper_stack.substr(0, stack_trace_line_one_end) + '\nFrom previous ' + original_stack
 }
 
-class TaxiosException extends Error {
+class TaxiosError extends Error {
   
-  constructor(error){
-    super(`WrapError: ${error.message}`)
+  constructor(error, message){
+    super(error.message || message)
     this.name = this.constructor.name
-    const error_stack = (error) ? error.stack : ''
+    const error_stack = (error) ? error.stack : error.message
     const wrapped_stack = joinStacks(this.stack, error_stack)
     Object.defineProperty(this, 'stack', { enumerable: false, value: wrapped_stack })
     for (const prop in error) {
+      if (prop === 'name' || prop === 'message') continue
       this[prop] = error[prop]
     }
   }
  
 }
-TaxiosException.joinStacks = joinStacks
+TaxiosError.joinStacks = joinStacks
 
 class Taxios {
   
@@ -198,7 +199,7 @@ class Taxios {
     }
     catch (error){
       this.last_response = error.response
-      throw new TaxiosException(error)
+      throw new TaxiosError(error)
     }
   }
 
@@ -316,4 +317,4 @@ class TestPinoLogger {
   
 }
 
-module.exports = { Taxios, TestPinoLogger, jsonClone }
+module.exports = { Taxios, TaxiosError, TestPinoLogger, jsonClone }
