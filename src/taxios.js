@@ -9,6 +9,30 @@ function jsonClone(o) {
   return JSON.parse(JSON.stringify(o))
 }
 
+function joinStacks(wrapper_stack, original_stack) {
+  const stack_trace_start = wrapper_stack.indexOf('\n    at ')
+  const stack_trace_line_one_end = wrapper_stack.indexOf('\n', stack_trace_start + 1)
+  const stack_trace_line_two_end = wrapper_stack.indexOf('\n', stack_trace_line_one_end + 1)
+  return wrapper_stack.substr(stack_trace_start, stack_trace_line_two_end - stack_trace_start) + '\n' + original_stack
+}
+
+class TaxiosException extends Error {
+  
+  static joinStacks = joinStacks 
+
+  constructor(error){
+    super(`WrapError: ${error.message}`)
+    this.name = this.constructor.name
+    const error_stack = (error) ? error.stack : ''
+    const wrapped_stack = joinStacks(this.stack, error.stack)
+    Object.defineProperty(this, 'stack', { enumerable: false, value: wrapped_stack })
+    for (const prop in error) {
+      this[prop] = error[prop]
+    }
+  }
+ 
+}
+
 class Taxios {
   
   static _initialiseClass(){
@@ -175,7 +199,7 @@ class Taxios {
     }
     catch (error){
       this.last_response = error.response
-      throw error
+      throw new TaxiosException(error)
     }
   }
 

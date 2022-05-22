@@ -1,6 +1,6 @@
 {
   "name": "@mhio/taxios",
-  "version": "0.6.0",
+  "version": "0.6.1-0",
   "description": "Test apps with axios",
   "main": "src/taxios.js",
   "repository": "https://github.com/mhio/taxios.git",
@@ -26,9 +26,9 @@
     "chai": "^4.3.4",
     "chai-subset": "^1.6.0",
     "eslint": "^7.32.0",
-    "jsdoc": "3.6.7",
-    "jsdoc-to-markdown": "7.0.1",
-    "koa": "2.13.1",
+    "jsdoc": "~3.6.10",
+    "jsdoc-to-markdown": "~7.1.1",
+    "koa": "~2.13.4",
     "mocha": "^10",
     "nock": "~13.2",
     "nodemon": "^2.0.12",
@@ -36,7 +36,7 @@
     "pino": "^7"
   },
   "dependencies": {
-    "axios": "~0.27.2"
+    "axios": "~0.26.1"
   },
   "mocha": {
     "require": [
