@@ -16,7 +16,9 @@ function joinStacks(original_stack, wrapper_stack) {
   const stack_trace_line_two_end = wrapper_stack.indexOf('\n', stack_trace_line_one_end + 1)
 
   const ori_stack_trace_start = original_stack.indexOf('\n    at ')
-  return wrapper_stack.substr(0, stack_trace_line_two_end||stack_trace_line_one_end) + '\nFrom previous:\n' + original_stack.substr(ori_stack_trace_start)
+  return wrapper_stack.substr(0, stack_trace_line_two_end||stack_trace_line_one_end)
+         + '\nFrom previous:\n'
+         + original_stack.substr(ori_stack_trace_start+1)
 }
 
 class TaxiosError extends Error {
