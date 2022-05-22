@@ -12,8 +12,8 @@ function jsonClone(o) {
 function joinStacks(wrapper_stack, original_stack) {
   const stack_trace_start = wrapper_stack.indexOf('\n    at ')
   const stack_trace_line_one_end = wrapper_stack.indexOf('\n', stack_trace_start + 1)
-  //const stack_trace_line_two_end = wrapper_stack.indexOf('\n', stack_trace_line_one_end + 1)
-  return wrapper_stack.substr(0, stack_trace_line_one_end) + '\nFrom previous ' + original_stack
+  const stack_trace_line_two_end = wrapper_stack.indexOf('\n', stack_trace_line_one_end + 1)
+  return wrapper_stack.substr(0, stack_trace_line_two_end||stack_trace_line_one_end) + '\nFrom previous ' + original_stack
 }
 
 class TaxiosError extends Error {
